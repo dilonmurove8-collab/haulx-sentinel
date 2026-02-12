@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HaulX | Sentinel Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .page { display: none; transition: 0.3s; }
+        .page.active { display: block; }
+        .tab-active { color: #3b82f6; border-top: 2px solid #3b82f6; }
+    </style>
+</head>
+<body class="bg-[#0a0f1e] text-white font-sans mb-20">
+
+    <nav class="p-4 border-b border-slate-800 flex justify-between items-center bg-[#0a0f1e] sticky top-0 z-50">
+        <h1 class="font-black italic text-xl tracking-tighter">TRACK<span class="text-blue-500">ME</span></h1>
+        <div class="bg-green-500/10 border border-green-500/50 px-2 py-1 rounded text-[10px] text-green-400 font-bold">SENTINEL ACTIVE</div>
+    </nav>
+
+    <div id="shipper" class="page active p-5">
+        <h2 class="text-2xl font-black italic mb-6 uppercase">Shipper <span class="text-blue-500">Vault</span></h2>
+        <div class="bg-gradient-to-br from-blue-600 to-blue-800 p-6 rounded-[2rem] shadow-xl mb-6">
+            <p class="text-[10px] font-bold opacity-70 uppercase tracking-widest">Available Capital</p>
+            <h3 id="mainBal" class="text-4xl font-black tracking-tight">$12,450.00</h3>
+            <div class="flex gap-2 mt-6">
+                <button class="flex-1 bg-white text-black py-3 rounded-xl font-bold text-xs">WITHDRAW</button>
+                <button class="flex-1 bg-black/30 py-3 rounded-xl font-bold text-xs">DEPOSIT</button>
+            </div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-3xl">
+            <h4 class="text-xs font-bold text-slate-500 mb-4 uppercase">Consignment Bids</h4>
+            <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
+                <div>
+                    <p class="font-bold text-sm">Harare → Mutare</p>
+                    <p class="text-[10px] text-blue-400 font-bold">$600.00 (Locked)</p>
+                </div>
+                <button onclick="processBid(600)" class="bg-blue-600 px-4 py-2 rounded-lg font-bold text-xs">ACCEPT</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="carrier" class="page p-5 text-center">
+        <h2 class="text-2xl font-black italic mb-6 text-left">CARRIER <span class="text-blue-500">COMMAND</span></h2>
+        <div class="bg-slate-900 h-64 rounded-3xl border border-slate-800 flex items-center justify-center mb-6">
+            <p class="text-slate-600 text-xs italic tracking-widest">[ SATELLITE MAP OF ZIMBABWE ]</p>
+        </div>
+        <div class="p-6 border-2 border-dashed border-slate-800 rounded-3xl">
+            <p class="text-slate-500 text-xs italic">No active manifests claimed yet.</p>
+        </div>
+    </div>
+
+    <div id="admin" class="page p-5">
+        <div class="border-l-4 border-blue-600 pl-4 mb-8">
+            <h2 class="text-2xl font-black italic">SENTINEL CORE</h2>
+            <p class="text-[8px] text-slate-500 tracking-[4px]">AUTHORITY: MASTER ADMIN</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                <p class="text-[10px] text-slate-500 uppercase font-bold">Global Escrow</p>
+                <p class="text-xl font-bold">$4.1M</p>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                <p class="text-[10px] text-slate-500 uppercase font-bold">Active Fleet</p>
+                <p class="text-xl font-bold">1,042</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-md border-t border-slate-800 flex justify-around p-3 z-50">
+        <button onclick="nav('shipper')" id="btn-shipper" class="flex flex-col items-center gap-1 tab-active">
+            <span class="text-xl">🏠</span><span class="text-[10px] font-bold">Hub</span>
+        </button>
+        <button onclick="nav('carrier')" id="btn-carrier" class="flex flex-col items-center gap-1 text-slate-500">
+            <span class="text-xl">📍</span><span class="text-[10px] font-bold">Fleet</span>
+        </button>
+        <button onclick="nav('admin')" id="btn-admin" class="flex flex-col items-center gap-1 text-slate-500">
+            <span class="text-xl">🛡️</span><span class="text-[10px] font-bold">Admin</span>
+        </button>
+    </div>
+
+    <script>
+        let balance = 12450.00;
+
+        function nav(pageId) {
+            // Switch Screens
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            // Update Tab Colors
+            document.querySelectorAll('button[id^="btn-"]').forEach(b => b.classList.remove('tab-active', 'text-slate-500'));
+            document.getElementById('btn-' + pageId).classList.add('tab-active');
+            
+            window.scrollTo(0,0);
+        }
+
+        function processBid(amt) {
+            if(balance >= amt) {
+                balance -= amt;
+                document.getElementById('mainBal').innerText = `$${balance.toLocaleString()}`;
+                alert("MANIFEST SECURED: Funds locked in Escrow.");
+            }
+        }
+    </script>
+</body>
+</html>
